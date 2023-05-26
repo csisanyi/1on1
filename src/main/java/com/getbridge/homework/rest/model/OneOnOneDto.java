@@ -1,27 +1,24 @@
 package com.getbridge.homework.rest.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@Document(collection = "oneonones")
-public class OneOnOne {
-    @Id
-    private String id;
+public class OneOnOneDto {
     private String title;
-    private List<User> participantIds;
+    private List<String> participantIds;
     private LocalDateTime plannedDate;
     private String description;
     private String location;
 
-    public OneOnOne(String title, List<User> participantIds, LocalDateTime plannedDate, String description, String location) {
+    // Constructors, getters, and setters
+
+    public OneOnOneDto() {
+    }
+
+    public OneOnOneDto(String title, List<String> participantIds, LocalDateTime plannedDate, String description, String location) {
         this.title = title;
         this.participantIds = participantIds;
         this.plannedDate = plannedDate;

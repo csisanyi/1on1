@@ -1,15 +1,18 @@
 package com.getbridge.homework.rest.controller;
 
+import com.getbridge.homework.rest.dto.Search1on1Dto;
 import com.getbridge.homework.rest.entity.OneOnOne;
-import com.getbridge.homework.rest.entity.OneOnOneDto;
+import com.getbridge.homework.rest.dto.OneOnOneDto;
 import com.getbridge.homework.rest.repository.OneOnOneRepository;
 import com.getbridge.homework.rest.service.Service;
 import com.getbridge.homework.rest.service.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 import java.util.Optional;
+
+
 
 @RestController
 @RequestMapping("/api/1on1/")
@@ -72,6 +75,14 @@ public class OneOnOneController {
     @PutMapping("/conclude/{oneOnOneId}")
     public ResponseEntity<OneOnOne> concludeOneOnOne(@PathVariable String oneOnOneId) {
             return ResponseEntity.ok(service.conclude1on1(oneOnOneId));
+    }
+
+
+
+    @PostMapping("search/1on1s")
+    public List<OneOnOne> search1on1s (@RequestBody Search1on1Dto search1on1Dto) {
+        return service.search(search1on1Dto);
+
     }
 
 }

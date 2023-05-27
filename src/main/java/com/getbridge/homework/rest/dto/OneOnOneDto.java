@@ -1,4 +1,4 @@
-package com.getbridge.homework.rest.entity;
+package com.getbridge.homework.rest.dto;
 
 import lombok.Data;
 
@@ -12,8 +12,6 @@ public class OneOnOneDto {
     private LocalDateTime plannedDate;
     private String description;
     private String location;
-
-    // Constructors, getters, and setters
 
     public OneOnOneDto() {
     }

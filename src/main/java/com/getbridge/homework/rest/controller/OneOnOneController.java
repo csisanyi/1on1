@@ -1,7 +1,9 @@
 package com.getbridge.homework.rest.controller;
 
-import com.getbridge.homework.rest.model.*;
+import com.getbridge.homework.rest.entity.OneOnOne;
+import com.getbridge.homework.rest.entity.OneOnOneDto;
 import com.getbridge.homework.rest.repository.OneOnOneRepository;
+import com.getbridge.homework.rest.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.getbridge.homework.rest.model;
+package com.getbridge.homework.rest.entity;
 
 import lombok.Data;
 

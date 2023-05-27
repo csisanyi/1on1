@@ -1,4 +1,4 @@
-package com.getbridge.homework.rest.model;
+package com.getbridge.homework.rest.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -20,6 +19,7 @@ public class OneOnOne {
     private LocalDateTime plannedDate;
     private String description;
     private String location;
+    private boolean concluded = false;
 
     public OneOnOne(String title, List<User> participantIds, LocalDateTime plannedDate, String description, String location) {
         this.title = title;
@@ -27,5 +27,9 @@ public class OneOnOne {
         this.plannedDate = plannedDate;
         this.description = description;
         this.location = location;
+    }
+
+    public OneOnOne(String id) {
+        this.id = id;
     }
 }

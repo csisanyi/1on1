@@ -1,4 +1,4 @@
-package com.getbridge.homework.rest.model;
+package com.getbridge.homework.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,5 +1,9 @@
-package com.getbridge.homework.rest.model;
+package com.getbridge.homework.rest.service.util;
 
+import com.getbridge.homework.rest.dto.UserDto;
+import com.getbridge.homework.rest.entity.OneOnOne;
+import com.getbridge.homework.rest.entity.OneOnOneDto;
+import com.getbridge.homework.rest.entity.User;
 import com.getbridge.homework.rest.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

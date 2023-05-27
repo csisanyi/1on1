@@ -19,6 +19,7 @@ public class OneOnOne {
     private LocalDateTime plannedDate;
     private String description;
     private String location;
+    private boolean concluded = false;
 
     public OneOnOne(String title, List<User> participantIds, LocalDateTime plannedDate, String description, String location) {
         this.title = title;
@@ -26,5 +27,9 @@ public class OneOnOne {
         this.plannedDate = plannedDate;
         this.description = description;
         this.location = location;
+    }
+
+    public OneOnOne(String id) {
+        this.id = id;
     }
 }

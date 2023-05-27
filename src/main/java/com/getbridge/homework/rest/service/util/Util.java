@@ -1,4 +1,4 @@
-package com.getbridge.homework.rest.util;
+package com.getbridge.homework.rest.service.util;
 
 import com.getbridge.homework.rest.dto.UserDto;
 import com.getbridge.homework.rest.entity.OneOnOne;

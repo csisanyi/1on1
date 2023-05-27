@@ -3,7 +3,8 @@ package com.getbridge.homework.rest.controller;
 import com.getbridge.homework.rest.entity.OneOnOne;
 import com.getbridge.homework.rest.entity.OneOnOneDto;
 import com.getbridge.homework.rest.repository.OneOnOneRepository;
-import com.getbridge.homework.rest.util.Util;
+import com.getbridge.homework.rest.service.Service;
+import com.getbridge.homework.rest.service.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,13 @@ public class OneOnOneController {
     @Autowired
     private Util util;
 
-    public OneOnOneController(OneOnOneRepository oneOnOneRepository, Util util) {
+    @Autowired
+    private Service service;
+
+    public OneOnOneController(OneOnOneRepository oneOnOneRepository, Util util, Service service) {
         this.oneOnOneRepository = oneOnOneRepository;
         this.util = util;
+        this.service = service;
     }
 
     @PostMapping("/create1on1")
@@ -44,14 +49,12 @@ public class OneOnOneController {
     }
 
     @PutMapping("/update1on1/{oneOnOneId}")
-    public ResponseEntity<OneOnOne> updateOneOnOne(@PathVariable String oneOnOneId, @RequestBody OneOnOneDto oneOnOneDto) {
-        Optional<OneOnOne> existingOneOnOne = oneOnOneRepository.findById(oneOnOneId);
-        if (existingOneOnOne.isPresent()) {
-            OneOnOne oneOnOne = util.convertOneOnOneDtoToEntity(oneOnOneDto);
-            OneOnOne updatedOneOnOne = oneOnOneRepository.save(oneOnOne);
-            return ResponseEntity.ok(updatedOneOnOne);
+    public ResponseEntity<OneOnOne> updateOneOnOne(@PathVariable String oneOnOneId, @RequestBody OneOnOneDto oneOnOneDto) throws IllegalAccessException {
+        OneOnOne oneOnOne = service.update1on1(oneOnOneId, oneOnOneDto);
+        if(!oneOnOne.isConcluded()) {
+            return oneOnOne.getId() == "empty" ? ResponseEntity.notFound().build() : ResponseEntity.ok(oneOnOne);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new IllegalAccessException("1on1 is concluded-readonly");
         }
     }
 
@@ -64,6 +67,11 @@ public class OneOnOneController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PutMapping("/conclude/{oneOnOneId}")
+    public ResponseEntity<OneOnOne> concludeOneOnOne(@PathVariable String oneOnOneId) {
+            return ResponseEntity.ok(service.conclude1on1(oneOnOneId));
     }
 
 }

@@ -2,7 +2,7 @@ package com.getbridge.homework;
 
 import com.getbridge.homework.rest.dto.UserDto;
 import com.getbridge.homework.rest.repository.UserRepository;
-import com.getbridge.homework.rest.util.Util;
+import com.getbridge.homework.rest.service.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

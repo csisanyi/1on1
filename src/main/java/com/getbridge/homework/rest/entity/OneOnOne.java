@@ -15,13 +15,13 @@ public class OneOnOne {
     @Id
     private String id;
     private String title;
-    private List<User> participantIds;
+    private List<String> participantIds;
     private LocalDateTime plannedDate;
     private String description;
     private String location;
     private boolean concluded = false;
 
-    public OneOnOne(String title, List<User> participantIds, LocalDateTime plannedDate, String description, String location) {
+    public OneOnOne(String title, List<String> participantIds, LocalDateTime plannedDate, String description, String location) {
         this.title = title;
         this.participantIds = participantIds;
         this.plannedDate = plannedDate;

@@ -6,9 +6,6 @@ import com.getbridge.homework.rest.dto.OneOnOneDto;
 import com.getbridge.homework.rest.repository.OneOnOneRepository;
 import com.getbridge.homework.rest.service.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Component;
 
 
@@ -23,14 +20,10 @@ public class Service {
     private OneOnOneRepository oneOnOneRepository;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
-
-    @Autowired
     private Util util;
 
-    public Service(OneOnOneRepository oneOnOneRepository, MongoTemplate mongoTemplate, Util util) {
+    public Service(OneOnOneRepository oneOnOneRepository, Util util) {
         this.oneOnOneRepository = oneOnOneRepository;
-        this.mongoTemplate = mongoTemplate;
         this.util = util;
     }
 

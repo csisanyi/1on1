@@ -49,8 +49,8 @@ public class HomeworkApplication {
         @Override
         public void run(String... args) throws Exception {
             if (userRepository.count() == 0) {
-                UserDto user1 = new UserDto("user1", "user@one.com");
-                UserDto user2 = new UserDto("user2", "user@two.com");
+                UserDto user1 = new UserDto("user1", "user@one.com", "password");
+                UserDto user2 = new UserDto("user2", "user@two.com", "password");
 
                 String id1 = userRepository.save(util.dtoToUsr(user1)).getId();
                 String id2 = userRepository.save(util.dtoToUsr(user2)).getId();

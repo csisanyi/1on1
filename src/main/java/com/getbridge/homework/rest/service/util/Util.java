@@ -38,10 +38,9 @@ public class Util {
         oneOnOne.setDescription(oneOnOneDto.getDescription());
         oneOnOne.setLocation(oneOnOneDto.getLocation());
 
-        List<User> participants = new ArrayList<>();
+        List<String> participants = new ArrayList<>();
         for (String participantId : oneOnOneDto.getParticipantIds()) {
-            Optional<User> participant = userRepository.findById(participantId);
-            participant.ifPresent(participants::add);
+            participants.add(participantId);
         }
         oneOnOne.setParticipantIds(participants);
         return oneOnOne;

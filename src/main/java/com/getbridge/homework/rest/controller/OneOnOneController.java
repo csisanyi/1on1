@@ -49,26 +49,11 @@ public class OneOnOneController {
         return ResponseEntity.ok(newOneOnOne);
     }
 
-    @GetMapping("/getall1on1s")
+    @GetMapping("/getall1on1sofuser/")
     public ResponseEntity<Iterable<OneOnOne>> getAllOneOnOnes(HttpServletRequestWrapper request) {
         String userId = request.getHeader("X-AUTHENTICATED-USER");
         Set<OneOnOne> oneOnOnes = oneOnOneRepository.findAll().stream().filter(_1on1 -> _1on1.getParticipantIds().contains(userId)).collect(Collectors.toSet());
         return ResponseEntity.ok(oneOnOnes);
-    }
-
-    @GetMapping("/getall1on1s/withoutauth")
-    public ResponseEntity<Iterable<OneOnOne>> getAllOneOnOnes() {
-        Iterable<OneOnOne> oneOnOnes = oneOnOneRepository.findAll();
-        return ResponseEntity.ok(oneOnOnes);
-    }
-
-    @DeleteMapping("/delete/all")
-    public ResponseEntity<Void> deleteAllOneOnOnes() {
-        Iterable<OneOnOne> oneOnOnes = oneOnOneRepository.findAll();
-        for(OneOnOne oneOnOne : oneOnOnes){
-            oneOnOneRepository.deleteById(oneOnOne.getId());
-        }
-        return ResponseEntity.noContent().build();
     }
 
     @ApiResponse(description = "User is not part of the requested 1on1", responseCode = "401")

@@ -19,6 +19,7 @@ public class MyFilter implements javax.servlet.Filter {
         super();
     }
 
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         servletContext = filterConfig.getServletContext();
         log = Logger.getLogger(MyFilter.class.getName());
@@ -33,11 +34,13 @@ public class MyFilter implements javax.servlet.Filter {
         HttpServletResponse    httpRes   = (HttpServletResponse)res;
 
         HttpSession session = httpReq.getSession();
-        String userid = session.getAttribute("globalId").toString();
-
-        httpReq.addHeader("X-AUTHENTICATED-USER", userid);
-
-        filterChain.doFilter(httpReq, httpRes);
+        if(null == session.getAttribute("globalId")){
+            filterChain.doFilter(httpReq, httpRes);
+        } else {
+            String userid = session.getAttribute("globalId").toString();
+            httpReq.addHeader("X-AUTHENTICATED-USER", userid);
+            filterChain.doFilter(httpReq, httpRes);
+        }
 
     }
 

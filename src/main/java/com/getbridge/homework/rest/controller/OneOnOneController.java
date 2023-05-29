@@ -89,15 +89,19 @@ public class OneOnOneController {
     }
 
     @DeleteMapping("/deleteoneonone/{oneOnOneId}")
-    public ResponseEntity<Void> deleteOneOnOne(@PathVariable String oneOnOneId, MyServletRequestWrapper request) {
+    public ResponseEntity<Void> deleteOneOnOne(@PathVariable String oneOnOneId, MyServletRequestWrapper request) throws IllegalAccessException {
         String userId = request.getHeader("X-AUTHENTICATED-USER");
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         Optional<OneOnOne> existingOneOnOne = oneOnOneRepository.findById(oneOnOneId);
         if (existingOneOnOne.isPresent()) {
-            oneOnOneRepository.deleteById(oneOnOneId);
-            return ResponseEntity.noContent().build();
+            if(existingOneOnOne.get().getParticipantIds().contains(userId)) {
+                oneOnOneRepository.deleteById(oneOnOneId);
+                return ResponseEntity.noContent().build();
+            } else {
+                throw new IllegalAccessException("user not in 1on1List");
+            }
         } else {
             return ResponseEntity.notFound().build();
         }

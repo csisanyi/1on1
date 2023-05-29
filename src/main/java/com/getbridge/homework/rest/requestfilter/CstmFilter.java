@@ -8,14 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import java.util.logging.*;
 
 @Component
-public class CustomHttpRequestFilter implements javax.servlet.Filter {
+public class CstmFilter implements Filter {
     private ServletContext servletContext;
-    private Logger log;
 
-    public CustomHttpRequestFilter(){
+    public CstmFilter(){
         super();
     }
 
@@ -24,12 +22,13 @@ public class CustomHttpRequestFilter implements javax.servlet.Filter {
         servletContext = filterConfig.getServletContext();
     }
 
+    @Override
     public void doFilter(   ServletRequest req,
                             ServletResponse res,
                             FilterChain filterChain)
             throws IOException, ServletException {
 
-        HttpServletRequestWrapper httpReq    = new HttpServletRequestWrapper((HttpServletRequest)req);
+        CustomHttpServletRequestWrapper httpReq    = new CustomHttpServletRequestWrapper((HttpServletRequest)req);
         HttpServletResponse    httpRes   = (HttpServletResponse)res;
 
         HttpSession session = httpReq.getSession();

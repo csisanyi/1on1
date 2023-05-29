@@ -30,7 +30,12 @@ public class Service {
     public OneOnOne update1on1(String id, OneOnOneDto oneOnOneDto) {
         Optional<OneOnOne> existingOneOnOne = oneOnOneRepository.findById(id);
         if (existingOneOnOne.isPresent()) {
-            OneOnOne oneOnOne = util.convertOneOnOneDtoToEntity(oneOnOneDto);
+            OneOnOne oneOnOne = existingOneOnOne.get();
+            oneOnOne.setTitle(oneOnOneDto.getTitle());
+            oneOnOne.setDescription(oneOnOneDto.getDescription());
+            oneOnOne.setPlannedDate(oneOnOneDto.getPlannedDate());
+            oneOnOne.setLocation(oneOnOneDto.getLocation());
+            oneOnOne.setParticipantIds(oneOnOneDto.getParticipantIds());
             OneOnOne updatedOneOnOne = oneOnOneRepository.save(oneOnOne);
             return updatedOneOnOne;
         } else {

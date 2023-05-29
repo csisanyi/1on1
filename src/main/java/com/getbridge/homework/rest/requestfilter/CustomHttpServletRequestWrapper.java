@@ -1,9 +1,10 @@
 package com.getbridge.homework.rest.requestfilter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.*;
 
-public class HttpServletRequestWrapper extends javax.servlet.http.HttpServletRequestWrapper {
+public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     private Map headerMap;
 
@@ -11,7 +12,7 @@ public class HttpServletRequestWrapper extends javax.servlet.http.HttpServletReq
         headerMap.put(name, new String(value));
     }
 
-    public HttpServletRequestWrapper(HttpServletRequest request){
+    public CustomHttpServletRequestWrapper(HttpServletRequest request){
         super(request);
         headerMap = new HashMap();
     }

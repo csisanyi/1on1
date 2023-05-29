@@ -51,16 +51,30 @@ public class HomeworkApplication {
             if (userRepository.count() == 0) {
                 UserDto user1 = new UserDto("user1", "user@one.com", "password");
                 UserDto user2 = new UserDto("user2", "user@two.com", "password");
+                UserDto user3 = new UserDto("user3", "user@three.com", "password");
+                UserDto user4 = new UserDto("user4", "user@four.com", "password");
+                UserDto user5 = new UserDto("user5", "user@five.com", "password");
+                UserDto user6 = new UserDto("user6", "user@six.com", "password");
 
                 String id1 = userRepository.save(util.dtoToUsr(user1)).getId();
                 String id2 = userRepository.save(util.dtoToUsr(user2)).getId();
-
-                if (oneOnOneRepository.count() == 0) {
-                    List<String> participantIds = List.of(id1, id2);
-                    OneOnOneDto oneOnOneDto = new OneOnOneDto("Title", participantIds, LocalDateTime.now(), "Description", "location");
-                    oneOnOneRepository.save(util.dtoToOneOnOne(oneOnOneDto));
+                String id3 = userRepository.save(util.dtoToUsr(user3)).getId();
+                String id4 = userRepository.save(util.dtoToUsr(user4)).getId();
+                String id5 = userRepository.save(util.dtoToUsr(user5)).getId();
+                String id6 = userRepository.save(util.dtoToUsr(user6)).getId();
+                List<String> participantIds1 = List.of(id1, id2, id3);
+                List<String> participantIds2 = List.of(id4, id5);
+                List<String> participantIds3 = List.of(id1, id6);
+                List<String> participantIds4 = List.of(id1, id2,id3,id4,id5,id6);
+                OneOnOneDto oneOnOneDto1 = new OneOnOneDto("Title", participantIds1, LocalDateTime.now(), "Description", "location");
+                OneOnOneDto oneOnOneDto2 = new OneOnOneDto("Title", participantIds2, LocalDateTime.now(), "Description", "location");
+                OneOnOneDto oneOnOneDto3 = new OneOnOneDto("Title", participantIds3, LocalDateTime.now(), "Description", "location");
+                OneOnOneDto oneOnOneDto4 = new OneOnOneDto("Title", participantIds4, LocalDateTime.now(), "Description", "location");
+                oneOnOneRepository.save(util.dtoToOneOnOne(oneOnOneDto1));
+                oneOnOneRepository.save(util.dtoToOneOnOne(oneOnOneDto2));
+                oneOnOneRepository.save(util.dtoToOneOnOne(oneOnOneDto3));
+                oneOnOneRepository.save(util.dtoToOneOnOne(oneOnOneDto4));
                 }
-            }
         }
     }
 }

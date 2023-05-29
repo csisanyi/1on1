@@ -1,4 +1,4 @@
-package com.getbridge.homework.rest.config;
+package com.getbridge.homework.rest.requestfilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;

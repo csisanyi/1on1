@@ -1,4 +1,4 @@
-package com.getbridge.homework.rest.config;
+package com.getbridge.homework.rest.requestfilter;
 
 import org.springframework.stereotype.Component;
 

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +38,11 @@ class ServiceTest {
     void setup() {
         MockitoAnnotations.openMocks(this);
         service = new Service(oneOnOneRepository, util);
-        String UPDATED_TITLE = "updated-title";
-        oneOnOneDto.setTitle(UPDATED_TITLE);
+        oneOnOneDto.setTitle("updated-title");
+        oneOnOneDto.setLocation("updated-location");
+        oneOnOneDto.setPlannedDate(LocalDateTime.now());
+        oneOnOneDto.setDescription("new description");
+        oneOnOneDto.setParticipantIds(new ArrayList<>());
         validOneOnOne.setId(VALID_ID);
         when(oneOnOneRepository.findById(eq(VALID_ID))).thenReturn(Optional.of(validOneOnOne));
     }
@@ -46,6 +50,12 @@ class ServiceTest {
     @Test
     void testUpdate1on1_ExistingOneOnOne_ReturnsUpdatedOneOnOne() {
         OneOnOne updatedOneOnOne = new OneOnOne();
+        updatedOneOnOne.setId(VALID_ID);
+        updatedOneOnOne.setParticipantIds(oneOnOneDto.getParticipantIds());
+        updatedOneOnOne.setLocation(oneOnOneDto.getLocation());
+        updatedOneOnOne.setTitle(oneOnOneDto.getTitle());
+        updatedOneOnOne.setDescription(oneOnOneDto.getDescription());
+        updatedOneOnOne.setPlannedDate(oneOnOneDto.getPlannedDate());
         when(oneOnOneRepository.findById(validOneOnOne.getId())).thenReturn(Optional.of(validOneOnOne));
         when(util.convertOneOnOneDtoToEntity(oneOnOneDto)).thenReturn(updatedOneOnOne);
         when(oneOnOneRepository.save(updatedOneOnOne)).thenReturn(updatedOneOnOne);
@@ -55,7 +65,6 @@ class ServiceTest {
         assertNotNull(result);
         assertEquals(updatedOneOnOne, result);
         verify(oneOnOneRepository).findById(VALID_ID);
-        verify(util).convertOneOnOneDtoToEntity(oneOnOneDto);
         verify(oneOnOneRepository).save(updatedOneOnOne);
     }
 

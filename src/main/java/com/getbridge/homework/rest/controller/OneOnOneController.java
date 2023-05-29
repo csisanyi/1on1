@@ -70,12 +70,6 @@ public class OneOnOneController {
 
     }
 
-    @GetMapping("/getall1on1s/withoutauth")
-    public ResponseEntity<Iterable<OneOnOne>> getAllOneOnOnes() {
-        Iterable<OneOnOne> oneOnOnes = oneOnOneRepository.findAll();
-        return ResponseEntity.ok(oneOnOnes);
-    }
-
     @PutMapping("/update1on1/{oneOnOneId}")
     public ResponseEntity<OneOnOne> updateOneOnOne(@PathVariable String oneOnOneId, @RequestBody OneOnOneDto oneOnOneDto, HttpServletRequestWrapper request) throws IllegalAccessException {
         String userId = request.getHeader("X-AUTHENTICATED-USER");

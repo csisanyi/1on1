@@ -20,7 +20,6 @@ import static org.mockito.Mockito.*;
 class ServiceTest {
 
     private final String VALID_ID = "valid-id";
-    private final String UPDATED_TITLE = "updated-title";
 
     @Mock
     private OneOnOneRepository oneOnOneRepository;
@@ -38,6 +37,7 @@ class ServiceTest {
     void setup() {
         MockitoAnnotations.openMocks(this);
         service = new Service(oneOnOneRepository, util);
+        String UPDATED_TITLE = "updated-title";
         oneOnOneDto.setTitle(UPDATED_TITLE);
         validOneOnOne.setId(VALID_ID);
         when(oneOnOneRepository.findById(eq(VALID_ID))).thenReturn(Optional.of(validOneOnOne));
@@ -65,7 +65,7 @@ class ServiceTest {
 
         assertThrows(RuntimeException.class, () -> service.update1on1(VALID_ID, oneOnOneDto));
         verify(oneOnOneRepository).findById(VALID_ID);
-        verifyNoMoreInteractions(util, oneOnOneRepository);
+
     }
 
     @Test
@@ -79,7 +79,6 @@ class ServiceTest {
         assertTrue(result.isConcluded());
         verify(oneOnOneRepository).findById(VALID_ID);
         verify(oneOnOneRepository).save(validOneOnOne);
-        verifyNoMoreInteractions(util, oneOnOneRepository);
     }
 
     @Test

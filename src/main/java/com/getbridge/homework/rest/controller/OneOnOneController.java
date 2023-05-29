@@ -7,6 +7,7 @@ import com.getbridge.homework.rest.dto.OneOnOneDto;
 import com.getbridge.homework.rest.repository.OneOnOneRepository;
 import com.getbridge.homework.rest.service.Service;
 import com.getbridge.homework.rest.service.util.Util;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,29 +51,42 @@ public class OneOnOneController {
 
     @GetMapping("/getall1on1s")
     public ResponseEntity<Iterable<OneOnOne>> getAllOneOnOnes(HttpServletRequestWrapper request) {
-        String userId = (String) request.getAttribute("X-AUTHENTICATED-USER");
+        String userId = request.getHeader("X-AUTHENTICATED-USER");
         Set<OneOnOne> oneOnOnes = oneOnOneRepository.findAll().stream().filter(_1on1 -> _1on1.getParticipantIds().contains(userId)).collect(Collectors.toSet());
         return ResponseEntity.ok(oneOnOnes);
     }
 
-    @GetMapping("/get1on1byid/{oneOnOneId}")
-    public ResponseEntity<OneOnOne> getOneOnOneById(@PathVariable String oneOnOneId, HttpServletRequestWrapper request) throws IllegalAccessException {
-        String userId = request.getHeader("X-AUTHENTICATED-USER");
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+    @GetMapping("/getall1on1s/withoutauth")
+    public ResponseEntity<Iterable<OneOnOne>> getAllOneOnOnes() {
+        Iterable<OneOnOne> oneOnOnes = oneOnOneRepository.findAll();
+        return ResponseEntity.ok(oneOnOnes);
+    }
 
+    @DeleteMapping("/delete/all")
+    public ResponseEntity<Void> deleteAllOneOnOnes() {
+        Iterable<OneOnOne> oneOnOnes = oneOnOneRepository.findAll();
+        for(OneOnOne oneOnOne : oneOnOnes){
+            oneOnOneRepository.deleteById(oneOnOne.getId());
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponse(description = "User is not part of the requested 1on1", responseCode = "401")
+    @GetMapping("/get1on1byid/{oneOnOneId}")
+    public ResponseEntity<OneOnOne> getOneOnOneById(@PathVariable String oneOnOneId, HttpServletRequestWrapper request) {
+        String userId = request.getHeader("X-AUTHENTICATED-USER");
         Optional<OneOnOne> oneOnOne = oneOnOneRepository.findById(oneOnOneId);
 
         List<String> ids = oneOnOne.map(OneOnOne::getParticipantIds).orElse(null);
         if(ids != null && ids.contains(userId)) {
             return ResponseEntity.ok(oneOnOne.get());
         } else {
-            throw new IllegalAccessException("user not in 1on1");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
     }
 
+    @ApiResponse(description = "1on1 is cocluded", responseCode = "401")
     @PutMapping("/update1on1/{oneOnOneId}")
     public ResponseEntity<OneOnOne> updateOneOnOne(@PathVariable String oneOnOneId, @RequestBody OneOnOneDto oneOnOneDto, HttpServletRequestWrapper request) throws IllegalAccessException {
         String userId = request.getHeader("X-AUTHENTICATED-USER");
@@ -84,12 +98,13 @@ public class OneOnOneController {
             oneOnOne = service.update1on1(oneOnOneId, oneOnOneDto);
             return oneOnOne.getId() == "empty" ? ResponseEntity.notFound().build() : ResponseEntity.ok(oneOnOne);
         } else {
-            throw new IllegalAccessException("1on1 is concluded-readonly");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
+    @ApiResponse(description = "User is not part of the requested 1on1", responseCode = "401")
     @DeleteMapping("/deleteoneonone/{oneOnOneId}")
-    public ResponseEntity<Void> deleteOneOnOne(@PathVariable String oneOnOneId, HttpServletRequestWrapper request) throws IllegalAccessException {
+    public ResponseEntity<Void> deleteOneOnOne(@PathVariable String oneOnOneId, HttpServletRequestWrapper request){
         String userId = request.getHeader("X-AUTHENTICATED-USER");
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -100,13 +115,14 @@ public class OneOnOneController {
                 oneOnOneRepository.deleteById(oneOnOneId);
                 return ResponseEntity.noContent().build();
             } else {
-                throw new IllegalAccessException("user not in 1on1List");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
+    @ApiResponse(description = "User is not part of the requested 1on1", responseCode = "401")
     @PutMapping("/conclude/{oneOnOneId}")
     public ResponseEntity<OneOnOne> concludeOneOnOne(@PathVariable String oneOnOneId, HttpServletRequestWrapper request) {
         String userId = request.getHeader("X-AUTHENTICATED-USER");
@@ -118,6 +134,7 @@ public class OneOnOneController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
+
 
 
     @PostMapping("search/1on1s")

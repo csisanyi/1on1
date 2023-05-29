@@ -54,13 +54,10 @@ public class HomeworkApplication {
 
                 String id1 = userRepository.save(util.dtoToUsr(user1)).getId();
                 String id2 = userRepository.save(util.dtoToUsr(user2)).getId();
-
-                if (oneOnOneRepository.count() == 0) {
-                    List<String> participantIds = List.of(id1, id2);
-                    OneOnOneDto oneOnOneDto = new OneOnOneDto("Title", participantIds, LocalDateTime.now(), "Description", "location");
-                    oneOnOneRepository.save(util.dtoToOneOnOne(oneOnOneDto));
+                List<String> participantIds = List.of(id1, id2);
+                OneOnOneDto oneOnOneDto = new OneOnOneDto("Title", participantIds, LocalDateTime.now(), "Description", "location");
+                oneOnOneRepository.save(util.dtoToOneOnOne(oneOnOneDto));
                 }
-            }
         }
     }
 }

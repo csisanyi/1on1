@@ -1,7 +1,6 @@
 package com.getbridge.homework.rest.controller;
 
 
-import com.getbridge.homework.rest.config.MyServletRequestWrapper;
 import com.getbridge.homework.rest.dto.Search1on1Dto;
 import com.getbridge.homework.rest.entity.OneOnOne;
 import com.getbridge.homework.rest.dto.OneOnOneDto;
@@ -13,11 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -40,7 +39,7 @@ public class OneOnOneController {
     }
 
     @PostMapping("/create1on1")
-    public ResponseEntity<OneOnOne> createOneOnOne(@RequestBody OneOnOneDto oneOnOne, HttpServletRequest request) {
+    public ResponseEntity<OneOnOne> createOneOnOne(@RequestBody OneOnOneDto oneOnOne, HttpServletRequestWrapper request) {
         String userId = (String) request.getAttribute("X-AUTHENTICATED-USER");
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -50,8 +49,9 @@ public class OneOnOneController {
     }
 
     @GetMapping("/getall1on1s")
-    public ResponseEntity<Iterable<OneOnOne>> getAllOneOnOnes() {
-        Iterable<OneOnOne> oneOnOnes = oneOnOneRepository.findAll();
+    public ResponseEntity<Iterable<OneOnOne>> getAllOneOnOnes(HttpServletRequestWrapper request) {
+        String userId = (String) request.getAttribute("X-AUTHENTICATED-USER");
+        Set<OneOnOne> oneOnOnes = oneOnOneRepository.findAll().stream().filter(_1on1 -> _1on1.getParticipantIds().contains(userId)).collect(Collectors.toSet());
         return ResponseEntity.ok(oneOnOnes);
     }
 
@@ -89,7 +89,7 @@ public class OneOnOneController {
     }
 
     @DeleteMapping("/deleteoneonone/{oneOnOneId}")
-    public ResponseEntity<Void> deleteOneOnOne(@PathVariable String oneOnOneId, MyServletRequestWrapper request) throws IllegalAccessException {
+    public ResponseEntity<Void> deleteOneOnOne(@PathVariable String oneOnOneId, HttpServletRequestWrapper request) throws IllegalAccessException {
         String userId = request.getHeader("X-AUTHENTICATED-USER");
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -108,23 +108,22 @@ public class OneOnOneController {
     }
 
     @PutMapping("/conclude/{oneOnOneId}")
-    public ResponseEntity<OneOnOne> concludeOneOnOne(@PathVariable String oneOnOneId, HttpServletRequest request) {
+    public ResponseEntity<OneOnOne> concludeOneOnOne(@PathVariable String oneOnOneId, HttpServletRequestWrapper request) {
         String userId = request.getHeader("X-AUTHENTICATED-USER");
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        Optional<OneOnOne> existingOneOnOne = oneOnOneRepository.findById(oneOnOneId);
+        if (existingOneOnOne.isPresent()) {
+            if (existingOneOnOne.get().getParticipantIds().contains(userId)) {
+                return ResponseEntity.ok(service.conclude1on1(oneOnOneId));
+            }
         }
-            return ResponseEntity.ok(service.conclude1on1(oneOnOneId));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
 
-
     @PostMapping("search/1on1s")
-    public List<OneOnOne> search1on1s (@RequestBody Search1on1Dto search1on1Dto, HttpServletRequest request) {
+    public List<OneOnOne> search1on1s (@RequestBody Search1on1Dto search1on1Dto, HttpServletRequestWrapper request) {
         String userId = request.getHeader("X-AUTHENTICATED-USER");
-        if (userId == null) {
-            return null;
-        }
-        return service.search(search1on1Dto);
+        return service.search(search1on1Dto).stream().filter(res -> res.getParticipantIds().contains(userId)).collect(Collectors.toList());
 
     }
 

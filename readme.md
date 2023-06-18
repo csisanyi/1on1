@@ -1,5 +1,7 @@
-# Check instruction.md first
-This project was made for a recruitment technical interview for a senior Java/Spring developer
+This project was made for a recruitment technical assesment for a senior Java/Spring developer position
+Although I haven't heard back from the company, so I take it as a negative feedback and warn you not to use it as a blueprint if you get into a similar situation. 
+It is a working MVP for the problem
+Check instruction.md first
 
 # Start
 App is using MongoDB<br>

@@ -1,3 +1,4 @@
+# Check instruction.md first
 # Start
 App is using MongoDB<br>
 If you don't have mongodb running on port 27017 please use Docker compose file from 
